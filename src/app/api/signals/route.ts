@@ -1,7 +1,7 @@
 /**
  * Signals API Route
  */
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 interface Signal {
   symbol: string;
@@ -23,9 +23,10 @@ function generateSignals(): Signal[] {
       tradingview: Math.random()
     };
     const composite = scores.twitter * 0.25 + scores.unusualWhales * 0.35 + scores.tradingview * 0.4;
+    const recommendation: 'BUY' | 'SELL' | 'HOLD' = composite > 0.65 ? 'BUY' : composite < 0.35 ? 'SELL' : 'HOLD';
     return {
       symbol,
-      recommendation: composite > 0.65 ? 'BUY' : composite < 0.35 ? 'SELL' : 'HOLD',
+      recommendation,
       confidence: Math.abs(composite - 0.5) * 2,
       scores,
       timestamp: new Date()
